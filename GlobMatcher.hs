@@ -1,8 +1,11 @@
+module GlobMatcher ((=-=)) where
+
 import Data.List
 import Debug.Trace
-(=-=) :: String -> String -> Bool
 
-s =-= g = matchGlob s g 
+(=-=) :: String -> String -> Bool
+s =-= g = matchGlob s g
+
 matchGlob ss ('*':[])       = True
 matchGlob ss ('*':gs)       = True && matchGlob (dropWhile ((/=) $ head gs) ss) gs
 matchGlob (s:ss) ('?':gs)   = True && matchGlob ss gs
@@ -21,6 +24,6 @@ charClass  gs (s:ss)   = (s `elem` (cClass gs)) && (matchGlob ss gs'')
             gs''                = drop ((length $ cClass gs)+1) gs
 
 test' = zipWith (matchGlob) searchStrs globs
-
+--Should return [True, False, True, False]
 globs       = ["f[il]le.*", "file?[aA][12]", "*.??[]aabc]c", "*.abc"]
 searchStrs  = ["file.xyz", "file.A.2", "asdf.ab]c", "asdf.dge"]
